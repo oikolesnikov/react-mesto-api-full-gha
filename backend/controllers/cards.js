@@ -50,7 +50,7 @@ const likeCard = (req, res, next) => {
   Card.findByIdAndUpdate( 
     cardId, 
     { $addToSet: { likes: owner } }, 
-    { new: true, runValidators: true }, 
+    { new: true }, 
   ) 
     .populate(['owner', 'likes']) 
     .then((card) => { 
@@ -67,8 +67,7 @@ const dislikeCard = (req, res, next) => {
     cardId, 
     { $pull: { likes: owner } }, 
     { 
-      new: true, 
-      runValidators: true, 
+      new: true
     }, 
   ) 
     .then((card) => { 
