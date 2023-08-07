@@ -43,5 +43,5 @@
 - Winston.
 
 ## Ссылки:
-- Frontend: 
-- Backend: 
+- Frontend: https://oikolesnikov.domain.study.nomoreparties.co/
+- Backend:  https://api.oikolesnikov.domain.nomoreparties.co/
