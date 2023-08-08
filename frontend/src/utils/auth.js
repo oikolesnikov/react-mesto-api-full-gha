@@ -1,4 +1,4 @@
-export const BASE_URL = 'https://api.ia-stepanov.nomoredomains.work';
+export const BASE_URL = 'https://api.oikolesnikov.domain.nomoreparties.co';
 
 export function registerUser(email, password) {
   return fetch(`${BASE_URL}/signup`, {
