@@ -102,7 +102,7 @@ class Api {
 }
 
 const api = new Api({
-  baseUrl: 'https://api.ia-stepanov.nomoredomains.work',
+  baseUrl: 'https://oikolesnikov.domain.study.nomoreparties.co',
   headers: {
     'Content-Type': 'application/json',
   },
