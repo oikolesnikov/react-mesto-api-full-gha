@@ -64,9 +64,9 @@ const getCurrentUser = (req, res, next) => {
   })
   .catch((err) => {
     if (err.message === 'NotFound') {
-      return next(new NotFoundError404('Пользователь не найден.'));
+      return next(new NotFound('Пользователь не найден.'));
     } else if (err.name === 'CastError') {
-      return next(new BadRequestError400('Неправильные данные.'));
+      return next(new BadRequest('Неправильные данные.'));
     } else {
       return next(err);
     }
