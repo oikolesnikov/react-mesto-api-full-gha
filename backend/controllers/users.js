@@ -84,10 +84,10 @@ const getCurrentUser = (req, res, next) => {
 };
 
 const updateUser = (req, res, next) => {
-  const { avatar } = req.body;
+  const { name, about } = req.body;
   User.findByIdAndUpdate(
     req.user._id,
-    { avatar },
+    { name, about },
     { new: true, runValidators: true }
   )
     .orFail(new NotFound('Пользователь с указанным _id не найден.'))
