@@ -54,21 +54,24 @@ const createUser = (req, res, next) => {
     .catch(next);
 };
 
-const getCurrentUser = (req, res, next) => User.findById(req.user._id)
-  .orFail(() => {
-    throw new NotFound('Пользователь не найден');
-  })
-  .then((user) => res.status(200).send({ user }))
-  .catch((err) => {
-    if (err.name === 'CastError') {
-      throw new BadRequest('Переданы некорректные данные');
-    } else if (err.name === 'NotFound') {
-      throw new NotFound('Пользователь не найден');
-    } else {
-      next(err);
-    }
-  })
-  .catch(next);
+const getCurrentUser = (req, res, next) => { 
+  User.findById(req.user._id)
+.then((user) => {
+  if (!user) {
+    throw new NotFound('Пользователь не найден.');
+  }
+  res.status(200).send(user);
+})
+.catch((err) => {
+  if (err.message === 'NotFound') {
+    return next(new NotFound('Пользователь не найден.'));
+  } else if (err.name === 'CastError') {
+    return next(new BadRequest('Неправильные данные.'));
+  } else {
+    return next(err);
+  }
+});
+};
 
 const updateUser = (req, res, next) => {
   const { name, about } = req.body;
