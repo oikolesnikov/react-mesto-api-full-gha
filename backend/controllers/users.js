@@ -40,7 +40,9 @@ const createUser = (req, res, next) => {
         password: hash,
       })
     )
-    .then((user) => res.send(user))
+    .then((user) => res.status(res.status(201)).send({
+    _id: user._id, name, about, avatar, email,
+  }))
     .catch((err) => {
       if (err.code === 11000) {
         return next(
