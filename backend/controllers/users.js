@@ -54,41 +54,40 @@ const createUser = (req, res, next) => {
     .catch(next);
 };
 
-const getCurrentUser = (req, res, next) => User.findById(req.user._id)
-  .orFail(() => {
-    throw new NotFound('Пользователь не найден');
-  })
-  .then((user) => res.status(200).send({ user }))
-  .catch((err) => {
-    if (err.name === 'CastError') {
-      throw new BadRequest('Переданы некорректные данные');
-    } else if (err.name === 'NotFound') {
-      throw new NotFound('Пользователь не найден');
-    } else {
-      next(err);
-    }
-  })
-  .catch(next);
+const getCurrentUser = (req, res, next) => {
+  userSchema.findById(req.user._id)
+    .then((user) => {
+      if (!user) {
+        throw new NotFound('Пользователь не найден.');
+      }
+      res.status(200).send(user);
+    })
+    .catch((err) => {
+      if (err.message === 'NotFound') {
+        return next(new NotFound('Пользователь не найден.'));
+      } else if (err.name === 'CastError') {
+        return next(new BadRequest('Неправильные данные.'));
+      } else {
+        return next(err);
+      }
+    });
+};
 
 const updateUser = (req, res, next) => {
   const { name, about } = req.body;
 
-  return User.findByIdAndUpdate(
-    req.user._id,
-    { name, about },
-    { new: true, runValidators: true },
-  ).orFail(() => {
-    throw new NotFound('Пользователь с указанным _id не найден');
-  })
-    .then((user) => res.status(200).send(user))
+  userSchema.findByIdAndUpdate(req.user._id, { name, about }, { new: true, runValidators: true })
+    .then((user) => res.send(user))
     .catch((err) => {
-      if (err.name === 'ValidationError' || err.name === 'CastError') {
-        throw new BadRequest('Переданы некорректные данные при обновлении профиля');
+      if (err.name === 'CastError' || err.name === 'ValidationError') {
+        return next(new BadRequest('Переданы некорректные данные при создании пользователя.'));
+      } else if (err.name === 'DocumentNotFoundError') {
+        return next(new NotFound('Пользователь с указанным _id не найден.'));
       } else {
-        next(err);
+        return next(err);
       }
-    })
-    .catch(next);
+    }
+    );
 };
 
 const updateAvatar = (req, res, next) => {
