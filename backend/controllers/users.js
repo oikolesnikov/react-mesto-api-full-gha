@@ -58,7 +58,7 @@ const getCurrentUser = (req, res, next) => {
   User.findById(req.user._id)
   .then((user) => {
     if (!user) {
-      throw new NotFoundError404('Пользователь не найден.');
+      throw new NotFound('Пользователь не найден.');
     }
     res.status(200).send(user);
   })
